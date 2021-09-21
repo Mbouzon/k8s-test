@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels: 
+      app: webserver
+  template:
+    metadata:
+      name: webserver
+      labels:
+        app: webserver
+    spec:
+      containers:
+        - name: webserver
+          image: mbouzon/k8s-test:7
+          env:
+            - name: AGENT-HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          #resources:
+          #    limits:
+          #      memory: "128Mi"
+          #      cpu: "500m"
+          ports:
+            - containerPort: 8080
